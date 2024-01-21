@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./libs/peerjs.min.js"></script>
+    <script>
+        window.addEventListener("load", () => {
+            let peer = new Peer({
+                // host: "0.0.0.0",
+                // port: 9000,
+                debug: 2
+            });
+
+            peer.on('open', (id) => {
+                console.log('My peer ID is: ' + id);
+            });
+
+            peer.on('error', (err) => {
+                console.log(err.type);
+            });
+
+            peer.on('connection', (conn) => {
+                console.log("connection established");
+            });
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

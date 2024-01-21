@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./libs/peerjs.min.js"></script>
+    <script>
+        window.addEventListener("load", () => {
+            let peer = new Peer({
+                // host: "0.0.0.0",
+                // port: 9000,
+                debug: 2
+            });
+
+            peer.on('error', (err) => {
+                console.log(err.type);
+            });
+
+            peer.on("open", () => {
+                let conn = peer.connect("b6538b96-d7bc-4182-94cb-4bca5df02093")
+                setTimeout(() => { conn.send("hello") }, 1000)
+                // conn.send("hello")
+            })
+
+
+
+            // console.log(conn)
+
+
+
+
+
+            // peer.on('connection', (conn) => {
+            //     console.log("connection established");
+            // });
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>
