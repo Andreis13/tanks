@@ -10,6 +10,10 @@ export class RemoteController {
     });
   }
 
+  get shootKeyPressed() {
+    return false;
+  }
+
   updateStateFromData (data) {
     let x = data.x;
     let y = data.y;

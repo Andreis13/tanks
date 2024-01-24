@@ -16,7 +16,7 @@ window.onload = (event) => {
 
   let connections = [];
 
-  hub.on('connection', function(dataConnection) {
+  hub.on('connection', (dataConnection) => {
     console.log("peer connected");
     console.log(dataConnection)
     // $('#connections').append('<li>'+ dataConnection.metadata.player_name + ' : ' + dataConnection.label +'</li>');
@@ -30,6 +30,8 @@ window.onload = (event) => {
 
   document.getElementById("start-game").addEventListener("click", () => {
     let remoteControllers = connections.map((conn) => new RemoteController(conn));
+
+    document.getElementById("lobby").remove();
 
     let config = {
       type: Phaser.AUTO,
