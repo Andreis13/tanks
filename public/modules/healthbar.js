@@ -10,6 +10,16 @@ export class Healthbar {
     this.innerFill = scene.add.rectangle(x, y, sizeX, sizeY, color).setDisplayOrigin(sizeX / 2, -offsetY);
   }
 
+  hide() {
+    this.outerBox.setVisible(false);
+    this.innerFill.setVisible(false);
+  }
+
+  reveal() {
+    this.outerBox.setVisible(true);
+    this.innerFill.setVisible(true);
+  }
+
   setPercentage(percentage) {
     this.innerFill
       .setSize(this.sizeX * Math.min(Math.max(percentage, 0), 1), this.sizeY)

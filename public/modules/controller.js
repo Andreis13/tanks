@@ -18,11 +18,28 @@ window.onload = (event) => {
     let joystick = new Joystick(
       document.getElementById("joystick"),
       (joystick) => {
-        console.log(joystick.knobPosition);
-        dataConnection.send(joystick.knobPosition); // send stuff over the network
+        dataConnection.send({ joystick: joystick.knobPosition }); // send stuff over the network
       }
     );
 
+    let button = document.getElementById("btn-a")
+
+    let pressCallback = (event) => {
+      dataConnection.send({ buttons: { a_down: true } });
+      button.classList.add("pressed");
+    };
+
+    button.addEventListener("touchstart", pressCallback);
+    button.addEventListener("mousedown", pressCallback);
+
+    let releaseCallback = (event) => {
+      dataConnection.send({ buttons: { a_down: false } });
+      button.classList.remove("pressed");
+      // absorb_event(event);
+    };
+
+    button.addEventListener("touchend", releaseCallback);
+    button.addEventListener("mouseup", releaseCallback);
   });
 
 };

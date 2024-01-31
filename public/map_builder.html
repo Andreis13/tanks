@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./libs/phaser.js"></script>
+    <script src="./modules/map_builder.js" type="module"></script>
+</head>
+<body>
+    <div id="game-viewport"></div>
+
+    <div>
+        <input type="radio" id="metalTile" name="tileType" value="metal" checked />
+        <label for="metalTile"><img src="./assets/metal.png" width="50" height="50" /> Metal</label>
+    </div>
+
+    <div>
+        <input type="radio" id="brickTile" name="tileType" value="brick" />
+        <label for="brickTile"><img src="./assets/brick.png" width="50" height="50" /> Brick</label>
+    </div>
+
+    <div>
+        <input type="radio" id="crateTile" name="tileType" value="crate" />
+        <label for="crateTile"><img src="./assets/crate.png" width="50" height="50" /> Crate</label>
+    </div>
+
+    <div>
+        <input type="radio" id="medkitTile" name="tileType" value="medkit" />
+        <label for="medkitTile"><img src="./assets/medkit.png" width="50" height="50" /> Medkit</label>
+    </div>
+
+    <div>
+        <input type="radio" id="ammoTile" name="tileType" value="ammo" />
+        <label for="ammoTile"><img src="./assets/ammo.png" width="50" height="50" /> Ammo</label>
+    </div>
+
+    <div>
+        <input type="radio" id="tankTile" name="tileType" value="tank" />
+        <label for="tankTile"><img src="./assets/panthera.png" width="50" height="50" /> Tank</label>
+    </div>
+
+    <div>
+        <pre id="tilemapcode" style="border: 1px solid black">
+
+        </pre>
+
+        <button id="copy-button">Copy to Clipboard!</button>
+    </div>
+
+
+</body>
+</html>

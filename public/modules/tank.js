@@ -1,28 +1,38 @@
 
 import { Healthbar } from "./healthbar.js";
 
-export class Tank {
+export class Tank extends Phaser.GameObjects.Image {
   constructor(scene, x, y, controller) {
-    super(scene, x, y);
-    this.scene = scene;
-    this.obj = scene.physics.add.image(x, y, "tank").setScale(0.3).setCollideWorldBounds(true);
+    super(scene, x, y, "tank");
+    this.setScale(0.25);
+    scene.add.existing(this);
+
     this.controller = controller;
 
     this.uuid = Phaser.Math.RND.uuid();
-    this.obj.setData({ tankRef: this }); // pretty sure this could lead to obscure bugs
 
-    const healthBarOffsetX = 50;
-    const healthBarOffsetY = -50;
-    this.healthbar = new Healthbar(scene, x, y, 100, 10, 50);
+    // const healthBarOffsetX = 50;
+    // const healthBarOffsetY = -50;
+    this.healthbar = new Healthbar(scene, x, y, 80, 6, 50);
     this.maxHitPoints = 5;
     this.hitPoints = 5;
+
+    this.ammo = 5;
+
+    scene.physics.add.existing(this);
+    this.body.setSize(200, 200)
   }
 
-  shootProjectile (projectilesGroup) {
-    let projectile = this.scene.add.ellipse(this.obj.x, this.obj.y, 10, 10, "0xff0000").setData({ tankRef: this });;
-    projectilesGroup.add(projectile);
+  shootProjectile () {
+    if (this.ammo <= 0) {
+      return;
+    }
+    this.ammo--;
 
-    let vec = new Phaser.Math.Vector2(0, -1000).rotate(this.obj.rotation); // can probably do this with 4 vectors to reduce the amount of math
+    let projectile = this.scene.add.ellipse(this.x, this.y, 10, 10, "0x00ff00").setData({ tankUuid: this.uuid });
+    this.scene.projectilesGroup.add(projectile);
+
+    let vec = new Phaser.Math.Vector2(0, -1000).rotate(this.rotation); // can probably do this with 4 vectors to reduce the amount of math
 
     projectile.body.setVelocity(vec.x, vec.y);
   }
@@ -32,35 +42,52 @@ export class Tank {
     if (this.hitPoints <= 0) {
       this.destroy();
     } else {
-      this.healthbar.setPercentage(this.hitPoints / this.maxHitPoints);
+      this.updateHealthbar();
     }
+  }
+
+  replenishAmmo(ammoToReplenish) {
+    this.ammo += ammoToReplenish;
+  }
+
+  replenishHealth(hitPointsToReplenish) {
+    this.hitPoints = Math.max(this.maxHitPoints, this.hitPoints + hitPointsToReplenish);
+    this.updateHealthbar();
+  }
+
+  updateHealthbar() {
+    this.healthbar.setPercentage(this.hitPoints / this.maxHitPoints);
   }
 
   destroy() {
-    this.obj.destroy();
+    super.destroy();
     this.healthbar.destroy();
   }
 
-  update (projectilesGroup) {
-    if (!this.obj.active) {
+  update () {
+    if (!this.active) {
       return;
     }
 
-    this.obj.setVelocity(0);
+    this.body.setVelocity(0);
     if (this.controller.left.isDown) {
-      this.obj.setAngle(-90).setVelocityX(-160);
+      this.setAngle(-90);
+      this.body.setVelocityX(-160);
     } else if (this.controller.right.isDown) {
-      this.obj.setAngle(90).setVelocityX(160);
+      this.setAngle(90);
+      this.body.setVelocityX(160);
     } else if (this.controller.up.isDown) {
-      this.obj.setAngle(0).setVelocityY(-160);
+      this.setAngle(0);
+      this.body.setVelocityY(-160);
     } else if (this.controller.down.isDown) {
-      this.obj.setAngle(180).setVelocityY(160);
+      this.setAngle(180);
+      this.body.setVelocityY(160);
     }
 
     if (this.controller.shootKeyPressed) {
-      this.shootProjectile(projectilesGroup);
+      this.shootProjectile();
     }
 
-    this.healthbar.updatePosition(this.obj.x, this.obj.y);
+    this.healthbar.updatePosition(this.x, this.y);
   }
 }

@@ -4,19 +4,36 @@ export class RemoteController {
     this.down = { isDown: false };
     this.left = { isDown: false };
     this.right = { isDown: false };
+    this.shootKey = { isDown: false };
 
     peerConnection.on('data', (data) => {
       this.updateStateFromData(data);
     });
   }
 
-  get shootKeyPressed() {
-    return false;
+  get shootKeyPressed() { // gotta add a unit test for this type of thing
+    if (this.shootKey.isDown) {
+      if (this.shootKeyWasDown) {
+        this.shootKeyWasDown = true;
+        return false;
+      } else {
+        this.shootKeyWasDown = true;
+        return true;
+      }
+    } else {
+      this.shootKeyWasDown = false;
+      return false;
+    }
   }
 
-  updateStateFromData (data) {
-    let x = data.x;
-    let y = data.y;
+  updateStateFromData(data) {
+    if (data.joystick) { this.updateFromJoystick(data.joystick); }
+    if (data.buttons) { this.updateFromButtons(data.buttons); }
+  }
+
+  updateFromJoystick(joystickData) {
+    let x = joystickData.x;
+    let y = joystickData.y;
 
     if (x > 20) {
       this.right.isDown = true
@@ -41,7 +58,13 @@ export class RemoteController {
     } else {
       this.up.isDown = false
     }
+  }
 
-    console.log(this);
+  updateFromButtons(buttonsData) {
+    if (buttonsData.a_down) {
+      this.shootKey.isDown = true;
+    } else {
+      this.shootKey.isDown = false;
+    }
   }
 }
