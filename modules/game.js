@@ -6,7 +6,7 @@ window.onload = (event) => {
   let hub = new Peer({ debug: 2 });
 
   hub.on('open', (id) => {
-    let connectUrl = "http://192.168.178.219:8080/controller?hub_id=" + id
+    let connectUrl = "https://andreis13.github.io/tanks/controller?hub_id=" + id
 
     new QRCode(document.getElementById("connect-qr-code"), connectUrl);
 
@@ -19,7 +19,7 @@ window.onload = (event) => {
   hub.on('connection', (dataConnection) => {
     console.log("peer connected");
     console.log(dataConnection)
-    // $('#connections').append('<li>'+ dataConnection.metadata.player_name + ' : ' + dataConnection.label +'</li>');
+
     connections.push(dataConnection);
 
     let listItem = document.createElement("li");
